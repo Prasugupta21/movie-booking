@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express=require('express');
 const connectDB=require('./config/db');
-
+const path=require('path');
 
 const PORT=process.env.PORT ||3000  ;
 const app=express();
@@ -18,10 +18,12 @@ app.use('/booking',require('./routes/booking'));
 connectDB();
 
 
+app.use(express.static(path.join(__dirname,'./client/build')));
 
-app.get('/',(req,res)=>{
-    return res.send('welcome to home page');
-});
+app.use('*',function(req,res){
+    res.sendFile(path.join(__dirname,'./client/build/index.html'));
+})
+
 app.listen(PORT,()=>{
     console.log(`server started on  mode on port ${PORT}`)
 })
